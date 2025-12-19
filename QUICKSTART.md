@@ -56,15 +56,15 @@ Toggle **"Auto-start on Boot"** to automatically start AI ANC when your phone bo
 ### Quick Build Steps
 
 ```bash
-# 1. Clone
-git clone https://github.com/yourusername/AI_ANC_Phone.git
+# 1. Clone with submodules
+git clone --recurse-submodules https://github.com/yourusername/AI_ANC_Phone.git
 cd AI_ANC_Phone
 
-# 2. Ensure RNNoise is present
-cd app/src/main/cpp
-ls rnnoise  # Should show RNNoise files
-# If missing: git clone https://github.com/xiph/rnnoise.git
-cd ../../../
+# 2. Verify RNNoise submodule
+ls app/src/main/cpp/rnnoise/src  # Should show RNNoise source files
+
+# If you cloned without --recurse-submodules:
+git submodule update --init --recursive
 
 # 3. Open in Android Studio
 # File → Open → Select AI_ANC_Phone folder
