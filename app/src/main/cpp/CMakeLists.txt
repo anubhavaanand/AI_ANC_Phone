@@ -10,6 +10,7 @@ set(RNNOISE_SOURCES
     ${RNNOISE_DIR}/src/pitch.c
     ${RNNOISE_DIR}/src/kiss_fft.c
     ${RNNOISE_DIR}/src/celt_lpc.c
+    # Neural network implementation and model data
     ${RNNOISE_DIR}/src/nnet.c
     ${RNNOISE_DIR}/src/nnet_default.c
     ${RNNOISE_DIR}/src/parse_lpcnet_weights.c

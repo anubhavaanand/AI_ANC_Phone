@@ -41,6 +41,12 @@ If you already cloned without this flag, initialize the submodule:
 git submodule update --init --recursive
 ```
 
+**Troubleshooting:** If switching from a manual RNNoise clone to the submodule, clean your build first:
+```bash
+./gradlew clean
+# or in Android Studio: Build → Clean Project
+```
+
 ### 2. Open in Android Studio
 
 1. Launch Android Studio
