@@ -13,6 +13,7 @@ import kotlin.concurrent.thread
 
 class AudioService : Service() {
     private var isRunning = false
+    private var monitorMode = false
     private var rnNoise: RNNoise? = null
     private var audioRecord: AudioRecord? = null
     private var audioTrack: AudioTrack? = null
@@ -34,6 +35,7 @@ class AudioService : Service() {
             return START_NOT_STICKY
         }
 
+        monitorMode = intent?.getBooleanExtra(EXTRA_MONITOR_MODE, false) ?: false
         startForegroundService()
         startAudioPipeline()
         return START_STICKY
@@ -95,13 +97,18 @@ class AudioService : Service() {
                 val buffer = FloatArray(frameSize)
                 try {
                     audioRecord?.startRecording()
-                    audioTrack?.play()
+                    if (monitorMode) {
+                        audioTrack?.play()
+                    }
 
                     while (isRunning) {
                         val read = audioRecord?.read(buffer, 0, frameSize, AudioRecord.READ_BLOCKING) ?: 0
                         if (read > 0) {
                             rnNoise?.process(buffer)
-                            audioTrack?.write(buffer, 0, read, AudioTrack.WRITE_BLOCKING)
+                            // Only play back if monitor mode is enabled
+                            if (monitorMode) {
+                                audioTrack?.write(buffer, 0, read, AudioTrack.WRITE_BLOCKING)
+                            }
                         }
                     }
                 } catch (e: Exception) {
@@ -168,5 +175,6 @@ class AudioService : Service() {
         private const val CHANNEL_ID = "AI_ANC_CHANNEL"
         private const val NOTIFICATION_ID = 1
         const val ACTION_STOP = "STOP"
+        const val EXTRA_MONITOR_MODE = "monitor_mode"
     }
 }

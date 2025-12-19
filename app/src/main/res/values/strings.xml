@@ -20,5 +20,11 @@
     <string name="notification_content">Processing audio in real-time</string>
     <string name="stop">Stop</string>
     <string name="subtitle">Powered by RNNoise AI</string>
+    
+    <!-- Monitor Mode -->
+    <string name="monitor_mode_title">Monitor Mode</string>
+    <string name="monitor_mode_desc">Play processed audio (causes feedback - for testing only)</string>
+    <string name="monitor_enabled">Monitor mode enabled</string>
+    <string name="monitor_disabled">Monitor mode disabled</string>
 </resources>
 

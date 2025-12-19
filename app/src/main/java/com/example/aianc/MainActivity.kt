@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnToggle: Button
     private lateinit var tvStatus: TextView
     private lateinit var switchAutoStart: Switch
+    private lateinit var switchMonitorMode: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +40,33 @@ class MainActivity : AppCompatActivity() {
         btnToggle = findViewById(R.id.btnToggle)
         tvStatus = findViewById(R.id.tvStatus)
         switchAutoStart = findViewById(R.id.switchAutoStart)
+        switchMonitorMode = findViewById(R.id.switchMonitorMode)
 
-        // Load auto-start preference
+        // Load preferences
         val prefs = getSharedPreferences(BootReceiver.PREFS_NAME, Context.MODE_PRIVATE)
         switchAutoStart.isChecked = prefs.getBoolean(BootReceiver.KEY_AUTO_START, false)
+        switchMonitorMode.isChecked = prefs.getBoolean(KEY_MONITOR_MODE, false)
 
         // Auto-start switch listener
         switchAutoStart.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean(BootReceiver.KEY_AUTO_START, isChecked).apply()
             val message = if (isChecked) getString(R.string.auto_start_enabled) else getString(R.string.auto_start_disabled)
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+
+        // Monitor mode switch listener
+        switchMonitorMode.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean(KEY_MONITOR_MODE, isChecked).apply()
+            val message = if (isChecked) getString(R.string.monitor_enabled) else getString(R.string.monitor_disabled)
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            
+            // If service is running, restart it with new mode
+            if (isServiceRunning()) {
+                stopAudioService()
+                android.os.Handler(mainLooper).postDelayed({
+                    startAudioService()
+                }, 500)
+            }
         }
 
         btnToggle.setOnClickListener {
@@ -93,7 +111,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startAudioService() {
-        val intent = Intent(this, AudioService::class.java)
+        val prefs = getSharedPreferences(BootReceiver.PREFS_NAME, Context.MODE_PRIVATE)
+        val monitorMode = prefs.getBoolean(KEY_MONITOR_MODE, false)
+        
+        val intent = Intent(this, AudioService::class.java).apply {
+            putExtra(AudioService.EXTRA_MONITOR_MODE, monitorMode)
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)
         } else {
@@ -142,5 +165,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 100
+        private const val KEY_MONITOR_MODE = "monitor_mode_enabled"
     }
 }
