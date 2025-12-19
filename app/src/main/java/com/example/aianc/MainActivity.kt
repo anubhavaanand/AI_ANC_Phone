@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         // Auto-start switch listener
         switchAutoStart.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean(BootReceiver.KEY_AUTO_START, isChecked).apply()
-            val message = if (isChecked) "Auto-start enabled" else "Auto-start disabled"
+            val message = if (isChecked) getString(R.string.auto_start_enabled) else getString(R.string.auto_start_disabled)
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
 
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestPermissions() {
-        ActivityCompat.requestPermissions(this, permissions.toTypedArray(), 100)
+        ActivityCompat.requestPermissions(this, permissions.toTypedArray(), PERMISSION_REQUEST_CODE)
     }
 
     private fun isServiceRunning(): Boolean {
@@ -99,15 +99,19 @@ class MainActivity : AppCompatActivity() {
         } else {
             startService(intent)
         }
-        Toast.makeText(this, "AI Noise Cancellation Started", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.notification_title), Toast.LENGTH_SHORT).show()
         updateUI()
     }
 
     private fun stopAudioService() {
         val intent = Intent(this, AudioService::class.java).apply {
-            action = "STOP"
+            action = AudioService.ACTION_STOP
         }
-        startService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
         Toast.makeText(this, "AI Noise Cancellation Stopped", Toast.LENGTH_SHORT).show()
         updateUI()
     }
@@ -115,23 +119,28 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI() {
         val running = isServiceRunning()
         if (running) {
-            btnToggle.text = "Stop AI ANC"
-            tvStatus.text = "Status: Active ✓"
-            tvStatus.setTextColor(getColor(android.R.color.holo_green_dark))
+            btnToggle.text = getString(R.string.stop_anc)
+            tvStatus.text = getString(R.string.status_active)
+            tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark))
         } else {
-            btnToggle.text = "Start AI ANC"
-            tvStatus.text = "Status: Inactive"
-            tvStatus.setTextColor(getColor(android.R.color.holo_red_dark))
+            btnToggle.text = getString(R.string.start_anc)
+            tvStatus.text = getString(R.string.status_inactive)
+            tvStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark))
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 100 && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-            startAudioService()
-        } else {
-            Toast.makeText(this, "Permissions required for AI ANC", Toast.LENGTH_LONG).show()
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                startAudioService()
+            } else {
+                Toast.makeText(this, getString(R.string.perm_required), Toast.LENGTH_LONG).show()
+            }
         }
     }
-}
 
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 100
+    }
+}

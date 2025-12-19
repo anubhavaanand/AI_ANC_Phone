@@ -29,7 +29,7 @@ class AudioService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == "STOP") {
+        if (intent?.action == ACTION_STOP) {
             stopService()
             return START_NOT_STICKY
         }
@@ -41,15 +41,17 @@ class AudioService : Service() {
 
     private fun startForegroundService() {
         val stopIntent = Intent(this, AudioService::class.java).apply {
-            action = "STOP"
+            action = ACTION_STOP
         }
         val stopPendingIntent = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("AI Noise Cancellation Active")
-            .setContentText("Processing audio in real-time")
+            .setContentTitle(getString(R.string.notification_title))
+            .setContentText(getString(R.string.notification_content))
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
-            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", stopPendingIntent)
+            .addAction(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.stop), stopPendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -66,47 +68,71 @@ class AudioService : Service() {
 
         val minBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfigIn, audioFormat)
         
-        audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.MIC,
-            sampleRate,
-            channelConfigIn,
-            audioFormat,
-            minBufSize.coerceAtLeast(frameSize * 4)
-        )
+        try {
+            audioRecord = AudioRecord(
+                MediaRecorder.AudioSource.MIC,
+                sampleRate,
+                channelConfigIn,
+                audioFormat,
+                minBufSize.coerceAtLeast(frameSize * 4)
+            )
 
-        audioTrack = AudioTrack.Builder()
-            .setAudioAttributes(AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build())
-            .setAudioFormat(AudioFormat.Builder()
-                .setEncoding(audioFormat)
-                .setSampleRate(sampleRate)
-                .setChannelMask(channelConfigOut)
-                .build())
-            .setBufferSizeInBytes(minBufSize.coerceAtLeast(frameSize * 4))
-            .setTransferMode(AudioTrack.MODE_STREAM)
-            .build()
+            audioTrack = AudioTrack.Builder()
+                .setAudioAttributes(AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build())
+                .setAudioFormat(AudioFormat.Builder()
+                    .setEncoding(audioFormat)
+                    .setSampleRate(sampleRate)
+                    .setChannelMask(channelConfigOut)
+                    .build())
+                .setBufferSizeInBytes(minBufSize.coerceAtLeast(frameSize * 4))
+                .setTransferMode(AudioTrack.MODE_STREAM)
+                .build()
 
-        thread {
-            val buffer = FloatArray(frameSize)
-            audioRecord?.startRecording()
-            audioTrack?.play()
+            thread(name = "AudioProcessingThread") {
+                val buffer = FloatArray(frameSize)
+                try {
+                    audioRecord?.startRecording()
+                    audioTrack?.play()
 
-            while (isRunning) {
-                val read = audioRecord?.read(buffer, 0, frameSize, AudioRecord.READ_BLOCKING) ?: 0
-                if (read > 0) {
-                    rnNoise?.process(buffer)
-                    audioTrack?.write(buffer, 0, read, AudioTrack.WRITE_BLOCKING)
+                    while (isRunning) {
+                        val read = audioRecord?.read(buffer, 0, frameSize, AudioRecord.READ_BLOCKING) ?: 0
+                        if (read > 0) {
+                            rnNoise?.process(buffer)
+                            audioTrack?.write(buffer, 0, read, AudioTrack.WRITE_BLOCKING)
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error in audio pipeline", e)
+                } finally {
+                    cleanupResources()
                 }
             }
-            
-            audioRecord?.stop()
-            audioRecord?.release()
-            audioTrack?.stop()
-            audioTrack?.release()
-            rnNoise?.release()
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to initialize audio pipeline", e)
+            stopService()
         }
+    }
+
+    private fun cleanupResources() {
+        try {
+            audioRecord?.apply {
+                if (state == AudioRecord.STATE_INITIALIZED) stop()
+                release()
+            }
+            audioTrack?.apply {
+                if (playState == AudioTrack.PLAYSTATE_PLAYING) stop()
+                release()
+            }
+            rnNoise?.release()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error cleaning up resources", e)
+        }
+        audioRecord = null
+        audioTrack = null
+        rnNoise = null
     }
 
     private fun stopService() {
@@ -121,16 +147,26 @@ class AudioService : Service() {
                 CHANNEL_ID,
                 "AI ANC Service Channel",
                 NotificationManager.IMPORTANCE_LOW
-            )
+            ).apply {
+                description = "Real-time noise cancellation status"
+            }
             val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(serviceChannel)
+            manager?.createNotificationChannel(serviceChannel)
         }
+    }
+
+    override fun onDestroy() {
+        isRunning = false
+        cleanupResources()
+        super.onDestroy()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     companion object {
+        private const val TAG = "AudioService"
         private const val CHANNEL_ID = "AI_ANC_CHANNEL"
         private const val NOTIFICATION_ID = 1
+        const val ACTION_STOP = "STOP"
     }
 }

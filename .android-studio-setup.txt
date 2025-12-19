@@ -1,0 +1,76 @@
+═══════════════════════════════════════════════════════════════════
+    ANDROID STUDIO FIRST-TIME SETUP FOR AI_ANC_PHONE
+═══════════════════════════════════════════════════════════════════
+
+📂 PROJECT LOCATION:
+   /home/anubhavanand/AI_ANC_Phone
+
+📖 GUIDES AVAILABLE:
+   ├── ANDROID_STUDIO_GUIDE.md    ← Full step-by-step guide
+   ├── BUILD_CHECKLIST.md          ← Interactive checklist
+   ├── HOW_TO_BUILD_APK.md         ← All build methods
+   └── QUICKSTART.md               ← General quick start
+
+═══════════════════════════════════════════════════════════════════
+    QUICK STEPS (Once Android Studio is installed):
+═══════════════════════════════════════════════════════════════════
+
+1. Launch Android Studio
+
+2. Click "Open" → Navigate to:
+   /home/anubhavanand/AI_ANC_Phone
+
+3. Wait for Gradle Sync (2-5 minutes)
+
+4. Install SDK components when prompted:
+   - Android SDK Platform 34
+   - NDK (Side by side)
+   - CMake
+
+5. Build APK:
+   Build → Build Bundle(s) / APK(s) → Build APK(s)
+
+6. Find your APK at:
+   app/build/outputs/apk/debug/app-debug.apk
+
+═══════════════════════════════════════════════════════════════════
+    EXPECTED FIRST BUILD TIME:
+═══════════════════════════════════════════════════════════════════
+
+   Gradle Sync:          2-5 minutes
+   SDK Downloads:        5-10 minutes (first time only)
+   Building APK:         5-15 minutes
+   ─────────────────────────────────
+   TOTAL (first time):   15-30 minutes
+   
+   (Subsequent builds:   1-3 minutes ✨)
+
+═══════════════════════════════════════════════════════════════════
+    YOUR APK SPECIFICATIONS:
+═══════════════════════════════════════════════════════════════════
+
+   Package:           com.example.aianc
+   Version:           1.0 (versionCode 1)
+   Size:              ~10-15 MB
+   Min Android:       10 (API 29)
+   Target Android:    14 (API 34)
+   Architecture:      ARM, ARM64, x86, x86_64
+
+═══════════════════════════════════════════════════════════════════
+    TROUBLESHOOTING:
+═══════════════════════════════════════════════════════════════════
+
+   Problem: "SDK not found"
+   Fix: Tools → SDK Manager → Install Android 14 SDK
+
+   Problem: "NDK not found"  
+   Fix: Tools → SDK Manager → SDK Tools → Check NDK
+
+   Problem: "Build failed"
+   Fix: Build → Clean Project → Rebuild Project
+
+═══════════════════════════════════════════════════════════════════
+
+Ready to build! Open "ANDROID_STUDIO_GUIDE.md" for detailed instructions.
+
+Good luck! 🚀

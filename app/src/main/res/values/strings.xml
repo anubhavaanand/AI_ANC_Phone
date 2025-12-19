@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">AI ANC Phone</string>
+    
+    <!-- UI Labels -->
+    <string name="start_anc">Start AI ANC</string>
+    <string name="stop_anc">Stop AI ANC</string>
+    <string name="status_active">Status: Active ✓</string>
+    <string name="status_inactive">Status: Inactive</string>
+    
+    <!-- Auto-start Settings -->
+    <string name="auto_start_title">Auto-start on Boot</string>
+    <string name="auto_start_desc">Start AI ANC automatically when device boots</string>
+    <string name="info_text">✓ Universal Bluetooth earbud support\n✓ Privacy-first: 100% on-device\n✓ Low latency: &lt;50ms processing</string>
+    <string name="perm_required">Permissions required for AI ANC</string>
+    <string name="auto_start_enabled">Auto-start enabled</string>
+    <string name="auto_start_disabled">Auto-start disabled</string>
+    
+    <!-- Notifications -->
+    <string name="notification_title">AI Noise Cancellation Started</string>
+    <string name="notification_content">Processing audio in real-time</string>
+    <string name="stop">Stop</string>
+    <string name="subtitle">Powered by RNNoise AI</string>
 </resources>
+
