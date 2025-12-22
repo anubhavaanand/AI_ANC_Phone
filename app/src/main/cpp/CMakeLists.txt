@@ -7,7 +7,6 @@ set(RNNOISE_DIR rnnoise)
 set(RNNOISE_SOURCES
     ${RNNOISE_DIR}/src/denoise.c
     ${RNNOISE_DIR}/src/rnn.c
-    ${RNNOISE_DIR}/src/rnn_data.c
     ${RNNOISE_DIR}/src/nnet.c
     ${RNNOISE_DIR}/src/pitch.c
     ${RNNOISE_DIR}/src/kiss_fft.c
