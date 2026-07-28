@@ -143,9 +143,8 @@ MIT License - Open source and free to use
 
 ## 📧 Contact & Links
 
-- **GitHub**: [Repository URL]
-- **Demo Video**: [YouTube Link]
-- **Email**: your.email@example.com
+- **GitHub**: [github.com/anubhavaanand/AI_ANC_Phone](https://github.com/anubhavaanand/AI_ANC_Phone)
+- **Email**: anubhavanand354@gmail.com
 
 ---
 
