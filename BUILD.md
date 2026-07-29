@@ -278,31 +278,6 @@ externalNativeBuild {
 - Auto-start permission granted (Xiaomi, Oppo)
 - Foreground service notification visible
 
-## Continuous Integration (Future)
-
-### GitHub Actions Example
-
-```yaml
-name: Android CI
-
-on: [push, pull_request]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-      - name: Build with Gradle
-        run: ./gradlew assembleDebug
-```
-
 ## Deployment
 
 ### Google Play Store (Future)
