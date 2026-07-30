@@ -1,0 +1,3 @@
+[submodule "app/src/main/cpp/rnnoise"]
+	path = app/src/main/cpp/rnnoise
+	url = https://github.com/xiph/rnnoise.git

@@ -29,21 +29,25 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/AI_ANC_Phone.git
+git clone --recurse-submodules https://github.com/yourusername/AI_ANC_Phone.git
 cd AI_ANC_Phone
 ```
 
-### 2. Setup RNNoise Library
+**Note:** The `--recurse-submodules` flag automatically clones the RNNoise library submodule.
 
-The RNNoise library should already be included, but if missing:
+If you already cloned without this flag, initialize the submodule:
 
 ```bash
-cd app/src/main/cpp
-git clone https://github.com/xiph/rnnoise.git
-cd ../../../
+git submodule update --init --recursive
 ```
 
-### 3. Open in Android Studio
+**Troubleshooting:** If switching from a manual RNNoise clone to the submodule, clean your build first:
+```bash
+./gradlew clean
+# or in Android Studio: Build → Clean Project
+```
+
+### 2. Open in Android Studio
 
 1. Launch Android Studio
 2. Click **File → Open**
