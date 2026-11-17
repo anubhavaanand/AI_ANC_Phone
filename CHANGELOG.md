@@ -5,6 +5,12 @@ All notable changes to AI-Powered Real-Time Noise Suppression will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Robolectric unit tests for `BootReceiver` auto-start behavior (enabled / disabled / non-boot intent / default-off) (#19)
+- Unit test step (`testDebugUnitTest`) in CI (#19)
+
 ## [1.0.0] - 2025-12-19
 
 ### Added - MVP Release ✅
