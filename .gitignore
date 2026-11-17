@@ -89,3 +89,6 @@ cmake-build-*/
 *~
 *.swp
 *.bak
+
+# RNNoise sources are cloned locally / by CI, never committed
+app/src/main/cpp/rnnoise/
