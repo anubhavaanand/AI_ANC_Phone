@@ -1,11 +1,13 @@
 package com.example.aianc
 
+import android.content.Intent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 /**
@@ -37,6 +39,23 @@ class AudioServiceStateTest {
 
         controller.destroy()
 
+        assertFalse(AudioService.isServiceRunning())
+    }
+
+    @Test
+    fun `ACTION_STOP stops the service without a prior startForeground`() {
+        val controller = Robolectric.buildService(AudioService::class.java).create()
+
+        controller
+            .withIntent(Intent().setAction(AudioService.ACTION_STOP))
+            .startCommand(0, 1)
+
+        val service = controller.get()
+        assertTrue(shadowOf(service).isStoppedBySelf)
+        assertTrue(shadowOf(service).isForegroundStopped)
+
+        // stopSelf() only schedules destruction; onDestroy() clears the static flag.
+        controller.destroy()
         assertFalse(AudioService.isServiceRunning())
     }
 }

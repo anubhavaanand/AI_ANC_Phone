@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Fixed the stop path crashing with `ForegroundServiceDidNotStartInTimeException`: every intent now enters the foreground before any early return, and `MainActivity` stops the service with `stopService()` instead of starting it via `startForegroundService()` (#5)
 - Marked `AudioService.isRunning` as `@Volatile` so the audio processing thread reliably observes stop requests from the main thread (#9)
 - Pinned NDK to 28.2.13676358 in Gradle and CI so native builds are reproducible across environments (#11)
 - Added the missing `proguard-rules.pro` (referenced by the release build type) with JNI keep rules so R8 minification can be enabled safely (#12)
