@@ -261,7 +261,9 @@ thread {
 - Primarily in native processing
 - Frame processing: ~0.5-0.8ms
 
-*Note: Performance values in this section (latency budget, memory usage, CPU usage) are engineering estimates and targets pending measurement (tracking in issue #18).* ## Security & Privacy
+*Note: Performance values in this section (latency budget, memory usage, CPU usage) are engineering estimates and targets pending measurement (tracking in issue #18).*
+
+## Security & Privacy
 
 ### On-Device Processing
 - 100% local computation

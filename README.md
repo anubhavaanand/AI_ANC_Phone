@@ -39,11 +39,11 @@ Bluetooth Earbuds + Hardware ANC
 ## ✨ Key Features
 
 ✅ **Universal Compatibility**: Works with any Bluetooth earbuds (AirPods, Sony, Samsung, etc.)  
-✅ **24/7 Operation**: Survives app backgrounding, screen-off, and phone reboots (auto-start on reboot requires Android <14; see known limitations)  
+✅ **24/7 Operation**: Survives app backgrounding, screen-off, and phone reboots (auto-start on reboot is broken on Android 14+; see issue #6)  
 ✅ **Privacy-First**: 100% on-device processing, zero cloud dependency  
 ✅ **Battery-Optimized**: Respects Android Doze mode and battery saver constraints  
-✅ **Low Latency**: End-to-end processing <50ms (target) (acceptable for voice calls)  
-✅ **Lightweight**: 38KB AI model, <10% CPU usage on mid-range phones  
+✅ **Low Latency**: End-to-end processing <50ms target (acceptable for voice calls)  
+✅ **Lightweight**: 38KB AI model, <10% CPU usage on mid-range phones (target)  
 
 ## 🎯 Implementation Highlights
 
@@ -57,7 +57,7 @@ We use Android's `AudioRecord` API to capture microphone audio at 48kHz sample r
 
 ### Auto-Start & Persistence
 
-A `BOOT_COMPLETED` broadcast receiver automatically restarts the service after phone reboots (user-configurable). The service is configured with `START_STICKY` flag to ensure Android OS restarts it if killed due to memory pressure.
+A `BOOT_COMPLETED` broadcast receiver automatically restarts the service after phone reboots (user-configurable; broken on Android 14+ — see issue #6). The service is configured with `START_STICKY` flag to ensure Android OS restarts it if killed due to memory pressure.
 
 ## 🎯 Performance Targets (not yet benchmarked)
 
