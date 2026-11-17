@@ -89,7 +89,7 @@ A `BOOT_COMPLETED` broadcast receiver automatically restarts the service after p
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/AI_ANC_Phone.git
+git clone https://github.com/anubhavaanand/AI_ANC_Phone.git
 cd AI_ANC_Phone
 
 # Get RNNoise library (if not already present)

@@ -57,7 +57,7 @@ Toggle **"Auto-start on Boot"** to automatically start AI ANC when your phone bo
 
 ```bash
 # 1. Clone
-git clone https://github.com/yourusername/AI_ANC_Phone.git
+git clone https://github.com/anubhavaanand/AI_ANC_Phone.git
 cd AI_ANC_Phone
 
 # 2. Ensure RNNoise is present
