@@ -29,7 +29,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/AI_ANC_Phone.git
+git clone https://github.com/anubhavaanand/AI_ANC_Phone.git
 cd AI_ANC_Phone
 ```
 
