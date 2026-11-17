@@ -14,8 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pinned the RNNoise clone to v0.1.1 in all local build docs — v0.2+ removed `rnn_data.c`, which the CMake build requires (#14)
 - Replaced the placeholder `yourusername` repository URL with the real repo in README, BUILD and QUICKSTART (#17)
 - Corrected the ARCHITECTURE.md buffer-strategy description to match the actual single-buffer, single-threaded implementation (partial, #18)
-- Added the missing `proguard-rules.pro` (referenced by the release build type) with JNI keep rules so R8 minification can be enabled safely (#12)
->>>>>>> 0ba0d1f (docs: correct buffer-strategy description to match implementation)
 
 ### Added
 - Robolectric unit tests for `BootReceiver` auto-start behavior (enabled / disabled / non-boot intent / default-off) (#19)
