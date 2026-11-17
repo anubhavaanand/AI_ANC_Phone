@@ -73,7 +73,7 @@ A `BOOT_COMPLETED` broadcast receiver automatically restarts the service after p
 
 - ✅ Denoised ambient listening ("hear the world, minus the noise") through your earbuds — useful in offices, commutes, while studying
 - ✅ Improved focus during study/work sessions with ambient noise, heard locally through your earbuds
-- ✅ A testbed for on-device real-time AI audio processing (RNNoise, 10 ms frames, <1 ms inference)
+- ✅ A testbed for on-device real-time AI audio processing (RNNoise, 10ms frames, <1ms inference)
 
 > ⚠️ **Limitation:** Your voice sent to call/meeting apps is NOT processed — Android provides no API for an app to filter the microphone stream other apps receive. See ARCHITECTURE.md.
 
