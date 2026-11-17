@@ -69,7 +69,7 @@ A `BOOT_COMPLETED` broadcast receiver automatically restarts the service after p
 | **Model Size** | 38KB (RNNoise) |
 | **Memory Footprint** | <80MB heap |
 
-No published benchmark methodology yet — these are design targets pending measurement (tracking in issue #18).
+No published benchmark methodology yet — latency, CPU and battery figures are design targets pending measurement (tracking in issue #18).
 
 ## 🎯 Use Cases
 
