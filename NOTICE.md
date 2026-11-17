@@ -118,7 +118,7 @@ part of the RNNoise distribution and shares the Xiph BSD lineage above.
 
 - Copyright: Copyright (c) 2009-2010, Xiph.Org Foundation (celt_lpc.c/h);
   Copyright (c) 2007-2008, CSIRO; Copyright (c) 2007-2009, Xiph.Org Foundation (pitch.c/h)
-- License: BSD (2-clause style, as reproduced in the file headers)
+- License: BSD (3-clause style, as reproduced in the file headers)
 
 License text (verbatim from `src/celt_lpc.c` header):
 
