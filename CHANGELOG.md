@@ -9,9 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Marked `AudioService.isRunning` as `@Volatile` so the audio processing thread reliably observes stop requests from the main thread (#9)
+- Pinned NDK to 28.2.13676358 in Gradle and CI so native builds are reproducible across environments (#11)
+- Added the missing `proguard-rules.pro` (referenced by the release build type) with JNI keep rules so R8 minification can be enabled safely (#12)
 - Pinned the RNNoise clone to v0.1.1 in all local build docs — v0.2+ removed `rnn_data.c`, which the CMake build requires (#14)
 - Replaced the placeholder `yourusername` repository URL with the real repo in README, BUILD and QUICKSTART (#17)
-- Added the missing `proguard-rules.pro` (referenced by the release build type) with JNI keep rules so R8 minification can be enabled safely (#12)
 
 ### Added
 - Robolectric unit tests for `BootReceiver` auto-start behavior (enabled / disabled / non-boot intent / default-off) (#19)
