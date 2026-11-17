@@ -27,6 +27,7 @@ class AudioService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        started = true
         createNotificationChannel()
     }
 
@@ -164,6 +165,7 @@ class AudioService : Service() {
     }
 
     override fun onDestroy() {
+        started = false
         isRunning = false
         cleanupResources()
         super.onDestroy()
@@ -177,5 +179,10 @@ class AudioService : Service() {
         private const val NOTIFICATION_ID = 1
         const val ACTION_STOP = "STOP"
         const val EXTRA_MONITOR_MODE = "monitor_mode"
+
+        @Volatile
+        private var started = false
+
+        fun isServiceRunning(): Boolean = started
     }
 }
