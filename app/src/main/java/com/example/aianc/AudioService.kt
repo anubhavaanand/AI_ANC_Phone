@@ -14,6 +14,7 @@ import kotlin.concurrent.thread
 class AudioService : Service() {
     @Volatile
     private var isRunning = false
+    @Volatile
     private var monitorMode = false
     private var rnNoise: RNNoise? = null
     private var audioRecord: AudioRecord? = null
@@ -37,8 +38,23 @@ class AudioService : Service() {
             return START_NOT_STICKY
         }
 
-        monitorMode = intent?.getBooleanExtra(EXTRA_MONITOR_MODE, false) ?: false
+        val newMonitorMode = intent?.getBooleanExtra(EXTRA_MONITOR_MODE, false) ?: false
+        monitorMode = newMonitorMode
         startForegroundService()
+        
+        // Handle monitor mode changes while pipeline is running
+        if (isRunning && audioTrack != null) {
+            if (newMonitorMode && audioTrack?.playState != AudioTrack.PLAYSTATE_PLAYING) {
+                audioTrack?.play()
+            } else if (!newMonitorMode && audioTrack?.playState == AudioTrack.PLAYSTATE_PLAYING) {
+                // pause() is safe while the audio thread may be mid-write()
+                // (write() on a PAUSED track still buffers); flush() is NOT:
+                // it is unspecified against a concurrent WRITE_BLOCKING write.
+                // The loop's monitorMode gate already stops new writes.
+                audioTrack?.pause()
+            }
+        }
+        
         startAudioPipeline()
         return START_STICKY
     }

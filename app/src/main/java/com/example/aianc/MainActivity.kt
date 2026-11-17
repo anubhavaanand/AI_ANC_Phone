@@ -61,10 +61,7 @@ class MainActivity : AppCompatActivity() {
             
             // If service is running, restart it with new mode
             if (isServiceRunning()) {
-                stopAudioService()
-                android.os.Handler(mainLooper).postDelayed({
-                    startAudioService()
-                }, 500)
+                startAudioService()
             }
         }
 
