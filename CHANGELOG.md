@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Marked `AudioService.isRunning` as `@Volatile` so the audio processing thread reliably observes stop requests from the main thread (#9)
+- Added the missing `proguard-rules.pro` (referenced by the release build type) with JNI keep rules so R8 minification can be enabled safely (#12)
 
 ### Added
 - Robolectric unit tests for `BootReceiver` auto-start behavior (enabled / disabled / non-boot intent / default-off) (#19)
