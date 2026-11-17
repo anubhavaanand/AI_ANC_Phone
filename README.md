@@ -39,10 +39,10 @@ Bluetooth Earbuds + Hardware ANC
 ## ✨ Key Features
 
 ✅ **Universal Compatibility**: Works with any Bluetooth earbuds (AirPods, Sony, Samsung, etc.)  
-✅ **24/7 Operation**: Survives app backgrounding, screen-off, and phone reboots  
+✅ **24/7 Operation**: Survives app backgrounding, screen-off, and phone reboots (auto-start on reboot requires Android <14; see known limitations)  
 ✅ **Privacy-First**: 100% on-device processing, zero cloud dependency  
 ✅ **Battery-Optimized**: Respects Android Doze mode and battery saver constraints  
-✅ **Low Latency**: End-to-end processing <50ms (acceptable for voice calls)  
+✅ **Low Latency**: End-to-end processing <50ms (target) (acceptable for voice calls)  
 ✅ **Lightweight**: 38KB AI model, <10% CPU usage on mid-range phones  
 
 ## 🎯 Implementation Highlights
@@ -59,15 +59,17 @@ We use Android's `AudioRecord` API to capture microphone audio at 48kHz sample r
 
 A `BOOT_COMPLETED` broadcast receiver automatically restarts the service after phone reboots (user-configurable). The service is configured with `START_STICKY` flag to ensure Android OS restarts it if killed due to memory pressure.
 
-## 📊 Performance Benchmarks
+## 🎯 Performance Targets (not yet benchmarked)
 
 | Metric | Value |
 |--------|-------|
-| **Latency** | 35-50ms end-to-end |
-| **CPU Usage** | 6-10% (Snapdragon 888 equivalent) |
-| **Battery Impact** | 5-15% additional drain per hour |
+| **Latency** | 35-50ms end-to-end (target) |
+| **CPU Usage** | 6-10% (Snapdragon 888 equivalent) (target) |
+| **Battery Impact** | 5-15% additional drain per hour (target) |
 | **Model Size** | 38KB (RNNoise) |
 | **Memory Footprint** | <80MB heap |
+
+No published benchmark methodology yet — these are design targets pending measurement (tracking in issue #18).
 
 ## 🎯 Use Cases
 
@@ -113,7 +115,7 @@ cd ../../../
 
 ## 🛠️ Technical Challenges Solved
 
-1. **Low-Latency Processing**: Achieved <50ms by optimizing buffer sizes and using native C++ for RNNoise
+1. **Low-Latency Processing**: Target <50ms by optimizing buffer sizes and using native C++ for RNNoise
 2. **Battery Efficiency**: Implemented Doze-aware scheduling and minimal wake-lock usage
 3. **JNI Integration**: Created efficient float array passing between Kotlin and C++
 4. **Service Persistence**: Used foreground service with proper type declaration for Android 14+ compliance
