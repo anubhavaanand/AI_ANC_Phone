@@ -39,7 +39,7 @@ The RNNoise library should already be included, but if missing:
 
 ```bash
 cd app/src/main/cpp
-git clone https://github.com/xiph/rnnoise.git
+git clone --branch v0.1.1 --depth 1 https://github.com/xiph/rnnoise.git
 cd ../../../
 ```
 
@@ -239,7 +239,7 @@ ndk.dir=/path/to/Android/sdk/ndk/25.0.8775105
 **Solution**:
 ```bash
 cd app/src/main/cpp
-git clone https://github.com/xiph/rnnoise.git
+git clone --branch v0.1.1 --depth 1 https://github.com/xiph/rnnoise.git
 ```
 
 #### 3. CMake version mismatch
