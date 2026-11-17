@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import kotlin.concurrent.thread
 
 class AudioService : Service() {
+    @Volatile
     private var isRunning = false
     private var monitorMode = false
     private var rnNoise: RNNoise? = null
