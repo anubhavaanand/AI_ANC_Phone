@@ -63,7 +63,7 @@ cd AI_ANC_Phone
 # 2. Ensure RNNoise is present
 cd app/src/main/cpp
 ls rnnoise  # Should show RNNoise files
-# If missing: git clone https://github.com/xiph/rnnoise.git
+# If missing: git clone --branch v0.1.1 --depth 1 https://github.com/xiph/rnnoise.git
 cd ../../../
 
 # 3. Open in Android Studio
@@ -119,7 +119,7 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 **Fix**:
 ```bash
 cd app/src/main/cpp
-git clone https://github.com/xiph/rnnoise.git
+git clone --branch v0.1.1 --depth 1 https://github.com/xiph/rnnoise.git
 ```
 
 ---

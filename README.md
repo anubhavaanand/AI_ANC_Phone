@@ -93,8 +93,9 @@ git clone https://github.com/yourusername/AI_ANC_Phone.git
 cd AI_ANC_Phone
 
 # Get RNNoise library (if not already present)
+# v0.1.1 is required: v0.2+ removed rnn_data.c, which the CMake build needs
 cd app/src/main/cpp
-git clone https://github.com/xiph/rnnoise.git
+git clone --branch v0.1.1 --depth 1 https://github.com/xiph/rnnoise.git
 cd ../../../
 
 # Build in Android Studio
