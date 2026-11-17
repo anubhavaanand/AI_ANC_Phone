@@ -33,6 +33,16 @@ class AudioService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Entering the foreground is idempotent and must happen before any early return.
+        // A service started with startForegroundService() has a few seconds to call
+        // startForeground(); otherwise the system kills it with
+        // ForegroundServiceDidNotStartInTimeException. Handling ACTION_STOP first would
+        // break that contract, so every delivered intent enters the foreground first (#5).
+        if (!enterForeground()) {
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
         if (intent?.action == ACTION_STOP) {
             stopService()
             return START_NOT_STICKY
@@ -40,8 +50,7 @@ class AudioService : Service() {
 
         val newMonitorMode = intent?.getBooleanExtra(EXTRA_MONITOR_MODE, false) ?: false
         monitorMode = newMonitorMode
-        startForegroundService()
-        
+
         // Handle monitor mode changes while pipeline is running
         if (isRunning && audioTrack != null) {
             if (newMonitorMode && audioTrack?.playState != AudioTrack.PLAYSTATE_PLAYING) {
@@ -59,7 +68,7 @@ class AudioService : Service() {
         return START_STICKY
     }
 
-    private fun startForegroundService() {
+    private fun enterForeground(): Boolean {
         val stopIntent = Intent(this, AudioService::class.java).apply {
             action = ACTION_STOP
         }
@@ -74,10 +83,18 @@ class AudioService : Service() {
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE)
-        } else {
-            startForeground(NOTIFICATION_ID, notification)
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE)
+            } else {
+                startForeground(NOTIFICATION_ID, notification)
+            }
+            true
+        } catch (e: Exception) {
+            // Failing to enter the foreground is fatal for a microphone service:
+            // Android 14 rejects microphone foreground starts from the background.
+            Log.e(TAG, "Unable to enter the foreground; stopping service", e)
+            false
         }
     }
 

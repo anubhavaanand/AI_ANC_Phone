@@ -116,14 +116,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopAudioService() {
-        val intent = Intent(this, AudioService::class.java).apply {
-            action = AudioService.ACTION_STOP
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
-        }
+        // Plain stopService(): the ACTION_STOP path does not need the
+        // startForegroundService() contract, and starting a service just to stop it
+        // can crash with ForegroundServiceDidNotStartInTimeException if the service
+        // no longer reaches startForeground() in time (#5).
+        stopService(Intent(this, AudioService::class.java))
         Toast.makeText(this, "AI Noise Cancellation Stopped", Toast.LENGTH_SHORT).show()
         updateUI()
     }
