@@ -96,7 +96,7 @@ Bluetooth output
 - Frame Size: 480 samples (10ms @ 48kHz)
 - Audio Format: PCM Float
 - Channel: Mono
-- Buffer Strategy: Double buffering for low latency
+- Buffer Strategy: Single buffer, single-threaded processing loop
 
 ### 3. RNNoise JNI Wrapper
 
