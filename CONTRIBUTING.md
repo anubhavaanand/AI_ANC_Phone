@@ -53,7 +53,7 @@ cd AI_ANC_Phone
 
 # Ensure RNNoise is present
 cd app/src/main/cpp
-git clone https://github.com/xiph/rnnoise.git
+git clone --branch v0.1.1 --depth 1 https://github.com/xiph/rnnoise.git
 cd ../../../
 
 # Open in Android Studio
