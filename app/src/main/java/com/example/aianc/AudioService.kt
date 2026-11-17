@@ -47,8 +47,11 @@ class AudioService : Service() {
             if (newMonitorMode && audioTrack?.playState != AudioTrack.PLAYSTATE_PLAYING) {
                 audioTrack?.play()
             } else if (!newMonitorMode && audioTrack?.playState == AudioTrack.PLAYSTATE_PLAYING) {
+                // pause() is safe while the audio thread may be mid-write()
+                // (write() on a PAUSED track still buffers); flush() is NOT:
+                // it is unspecified against a concurrent WRITE_BLOCKING write.
+                // The loop's monitorMode gate already stops new writes.
                 audioTrack?.pause()
-                audioTrack?.flush()
             }
         }
         
